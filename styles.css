@@ -1,0 +1,146 @@
+/* Color Palette:
+CDB4DB - light purple
+C3B4DB - dark purple
+FFC8DD - light pink
+FFAFCC - dark pink
+BDE0FE - light blue
+A2D2FF - dark blue
+*/
+
+body {
+    background-color: #fff;
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 400;
+    font-family:  "Lucida Console", "Courier New", monospace;
+    line-height: 1.5;
+    margin: 0;
+    text-align: left;
+}
+
+h1 {
+    font-weight: 800;
+    font-size: 4rem;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    color: black;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+}
+
+.darkPinked {
+    background-color: #FFAFCC;
+}
+
+.pinked {
+    background-color: #FFC8DD;
+}
+
+.darkBlued {
+    background-color: #A2D2FF;
+}
+
+.blued {
+    background-color: #BDE0FE;
+}
+
+.darkPurpled {
+    background-color: #C3B4DB;
+}
+
+.purpled {
+    background-color: #CDB4DB;
+}
+
+.header {
+    color: #FFF;
+    padding: 9%;
+    text-align: center;
+}
+
+.section {
+    padding: 0.5rem 2rem 0.5rem 2rem;
+}
+
+/* Make the entire carousel fixed size in frisbee page */
+.carousel {
+    margin: auto;
+    width: 600px;
+    height: 450px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.carousel-inner {
+    /* make sure .carousel-item[s] will get correct height */
+    height: 100%;
+  }
+
+.carousel-item img {
+    object-fit: fill;
+    height: 450px !important;
+    width: 300px;
+}
+
+.frisbeeContainer {
+    display: inline-flex;
+    width: 49%;
+    padding: 10px;
+    margin: auto;
+}
+
+/* Nav Bar prettification */
+.navBar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background-color: #111;
+}
+
+.barItem {
+    float: left;
+}
+
+.barItem a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 18px;
+    text-decoration: none;
+
+    /* push each bar container to the right to align with the section */
+    position: relative;
+    left: 3.5rem;
+}
+
+/* Change the link color to dark-version of the original color on hover */
+
+.pinkHover a:hover {
+    background-color: #FFAFCC;
+}
+
+.blueHover a:hover {
+    background-color: #A2D2FF;
+}
+
+.purpleHover a:hover {
+    background-color: #C3B4DB;
+}
+
+#dropdown {
+    display: none;
+}
+
+#menu:hover #dropdown {
+    display:block;
+    width: 100%;
+}
