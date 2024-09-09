@@ -1,2 +1,2 @@
 # PS70
- Repo for all PS70 related work!
+Documentation for PS70: Introduction to Digital Fabrication
