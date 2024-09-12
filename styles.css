@@ -148,3 +148,22 @@ footer {
 img{
     width: 75%;
 }
+
+/* For icons in index.html page */
+/* One row has 2 containers */
+.recRow {
+    display: inline-flex;
+    width: 100%;
+}
+
+/* Make containers around half-size of the screen */
+.half-size {
+    width: 50%;
+    padding: 2% 4% 4% 4%;
+}
+
+/* Resize the pic to fit the container it's in */
+.iconPic {
+    width: 50%;
+    height: 100%;
+}
