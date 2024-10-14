@@ -37,6 +37,67 @@
           </ul>
         </div>
 
+        <div class="container">
+            <div class="section">
+                <h3><b>Programming to the Kinetic Sculpture </b></h3>
+                <hr> <!-- Adds horizontal line -->
+
+                <p> 
+                    For this week, I decided to add some programming to my 
+                    conveyor belt mechanism. My idea was to have the conveyor belt
+                    roll at different speeds, preferably from slow speed to 
+                    high speed. <br> <br>
+
+                    To do this, I had a function that took in the direction and speed 
+                    the motor would spin in. Then, by including a for loop in my code,
+                    I could effectively change the speed in which my motor was spinning. 
+                    Here is my code. <br>
+                    <pre>
+                        <code>
+                                        
+    const int A1A = 3;  // define pin 3 for A-1A (PWM Speed)
+    const int A1B = 4;  // define pin 4 for A-1B (direction)
+    
+    void setup() {
+      pinMode(A1A, OUTPUT); // specify these pins as outputs
+      pinMode(A1B, OUTPUT);
+    }
+    
+    void loop() {
+      for (int i = 0; i < 255; i++)
+      {
+        motorA(HIGH, i);  // turn motor CW 
+      }
+    }
+    
+    // This is a custom function to drive Motor A
+    // inputs: direction (HIGH/LOW), speed (0-255)
+    // outputs: motor control
+    
+    void motorA(byte d, int s) {
+      if(d == HIGH){ // Counter-clockwise
+        analogWrite(A1A, 255-s); 
+        digitalWrite(A1B, HIGH); 
+      } else if (d == LOW){ // Clockwise
+        analogWrite(A1A, s); 
+        digitalWrite(A1B, LOW);
+      }
+    }
+                        </code>
+                    </pre>
+                </p>
+                
+                <p> Here's the end result! </p>
+                <video width="640" height="480" controls>
+                    <source src="https://yayeetying.github.io/PS70/video/conveyorbelt2.mov" type="video/mp4">
+                </video>
+                <br> <br>
+
+                <p> And here's my schematic of my circuit. </p>
+
+            </div>
+        </div>
+
     <footer class="darkBlued">
         <p> &#169; Yaying Liang Li 2024<br>
             Email me <a href="mailto:yliangli@college.harvard.edu"> here! </a> </p>
