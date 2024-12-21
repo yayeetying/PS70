@@ -29,6 +29,10 @@
                   <li> <a href="week6.html"> Week 6 </a></li>
                   <li> <a href="week7.html"> Week 7 </a></li>
                   <li> <a href="week8.html"> Week 8 </a></li>
+                  <li> <a href="week9.html"> Week 9 </a></li>
+                  <li> <a href="week10.html"> Week 10 </a></li>
+                  <li> <a href="week11.html"> Week 11 </a></li>
+                  <li> <a href="week12.html"> Week 12 </a></li>
                 </ul>
               </li>
               <li class="barItem blueHover"><a href="../about.html">About</a></li>
@@ -36,6 +40,81 @@
               <li class="barItem blueHover"><a href="../proposal.html">Final Project Proposal</a></li>
           </ul>
         </div>
+
+        <div class="container">
+          <div class="section">
+              <h3><b>Input Sensors!</b></h3>
+              <hr> <!-- Adds horizontal line -->
+
+              <h4><b>Capacitive Sensor to Measure Soil Moisture</b></h4>
+              <video width="640" height="480" controls>
+                <source src="https://yayeetying.github.io/PS70/video/SucculentMoistureSensor.MOV" type="video/mp4">
+            </video> <br> <br>
+            Above, you can see me working with a Soil Moisture sensor to detect the amount of moisture in my succulent.
+            According to the output, the moisture levels during that particular time with that level of moisture was around
+            2500. After doing some <a href="https://metergroup.com/measurement-insights/soil-moisture-sensors-how-they-work-why-some-are-not-research-grade/">
+            research</a>, this is what I found out about how my moisture sensor works: essentially, when you place the 2
+            prongs (2 electrodes) into the soil, the soil acts as dielectic material, and if the water content in that
+            soil increases, the capacitance between the 2 prongs increases as well. This change in capacitance
+            is converted into some volumetric water content reading (which is the number that we're seeing on our screen). <br> <br>
+            Here is the code to achieve that: <br>
+            <pre>
+              <code>
+#define sensorPin A0
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  Serial.print("Analog output: ");
+  Serial.println(readSensor());
+  delay(500);
+}
+
+int readSensor() {
+  int sensorValue = analogRead(sensorPin);  // Read the analog value from sensor
+  return sensorValue;             // Return analog moisture value
+}
+              </code>
+            </pre>
+            <br>
+            <h4><b>Output Device</b></h4>
+            <video width="640" height="480" controls>
+              <source src="https://yayeetying.github.io/PS70/video/LEDLight.MOV" type="video/mp4">
+          </video> <br> <br>
+          <p> Above shows the output device I have. I want to include some LED to the final project as a 
+            physical indicator that the plant is thriving and doesn't need water. <br> 
+            <pre>
+              <code>
+#include Adafruit_NeoPixel.h
+
+#define PIN        9 
+#define NUMPIXELS 10 
+                
+Adafruit_NeoPixel strip(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+                
+void setup() {
+  strip.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
+  strip.show();            // Turn OFF all pixels ASAP
+  strip.setBrightness(10); // Set BRIGHTNESS low to reduce draw (max = 255)
+}
+                
+void loop() {
+  strip.clear(); // Set all pixel colors to 'off'
+
+  for(int i=0; i<=NUMPIXELS-1; i++) {          
+    strip.setPixelColor(i, strip.Color(0, 150, 0));         
+    strip.show();
+  }
+}
+              </code>
+            </pre>
+          </p>
+          </div>
+        </div>
+
+
 
     <footer class="darkBlued">
         <p> &#169; Yaying Liang Li 2024<br>
