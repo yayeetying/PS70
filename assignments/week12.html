@@ -6,12 +6,12 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <link href="../styles.css" rel="stylesheet">
-        <title>Week 6</title>
+        <title>Week 12</title>
 
     </head>
     <body>
         <div class="header darkBlued">
-            <h1>PS70 <br> Week 6</h1>
+            <h1>PS70 <br> Week 12</h1>
         </div>
 
         <!-- Nav Bar -->
@@ -37,16 +37,165 @@
               </li>
               <li class="barItem blueHover"><a href="../about.html">About</a></li>
               <!-- Colored box denotes active tab -->
-              <li class="barItem blueHover"><a href="../proposal.html">Final Project Proposal</a></li>
+              <li class="barItem blueHover"><a href="../proposal.html">Final Project</a></li>
           </ul>
         </div>
 
         <div class="container">
             <div class="section">
-                <h3><b>Fusion 360 and Laser Cutting!</b></h3>
+                <h3><b>Machine Building GroupWork!</b></h3>
                 <hr> <!-- Adds horizontal line -->
   
-                <h4><b>First, the box!</b></h4>
+                <h4><b>Documentation found <a href="https://yanyans360.github.io/PHYS70-2024-Aiyanna/10_machine/index.html">here</a></b></h4>
+                <br>
+                <p>Here are our final contributions, by the <b>controller group</b>. We first have code that controls the joystick motion 
+                    (ie. move the robot forward or backwards when you press the joystick up or down, or rotate the snake head left or right 
+                    when you move the joystick left or right). We then have the code for the encoder to calculate the distance traveled.
+                </p>
+                <pre>
+                    <code>
+                        #include ESP32Servo.h
+                            #include AccelStepper.h
+                            
+                            // Define pin connections
+                            const int vrxPin = 2;         // Joystick X-axis
+                            const int vryPin = 3;         // Joystick Y-axis
+                            const int servoxPin = 4;      // Servo pin
+                            const int stepPin = 7;        // Stepper motor step pin
+                            const int dirPin = 6;         // Stepper motor direction pin
+                            
+                            Servo servo;
+                            
+                            // Initialize the stepper with DRIVER type (for step and direction control)
+                            AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
+                            
+                            void setup() {
+                              // Initialize Serial Monitor for debugging
+                              Serial.begin(115200);
+                            
+                              servo.attach(servoxPin);
+                              pinMode(vrxPin, INPUT);
+                              pinMode(vryPin, INPUT);
+                              // Set maximum speed and acceleration for the stepper motor
+                              stepper.setMaxSpeed(750);
+                              stepper.setAcceleration(3000);
+                            }
+                            
+                            void loop() {
+                              // Read joystick values
+                              int xValue = analogRead(vrxPin);
+                              int yValue = analogRead(vryPin);
+                            
+                              // Map the joystick X-axis value to a servo angle (0-180 degrees)
+                              int servoxAngle = map(xValue, 0, 4095, 0, 180);
+                            
+                              // Write the angle to the servo
+                              servo.write(servoxAngle);
+                            
+                              int minSpeed = 300;
+                            
+                              // Determine speed based on joystick Y-axis input
+                              if (yValue > 2600) {
+                                // Joystick pushed forward: set direction to clockwise (CW)
+                                int speed = map(yValue, 2601, 4095, minSpeed, stepper.maxSpeed());
+                                stepper.setSpeed(speed);
+                              }
+                              else if (yValue < 2100) {
+                                // Joystick pulled backward: set direction to counterclockwise (CCW)
+                                int speed = map(yValue, 2099, 0, -minSpeed, -stepper.maxSpeed());
+                                stepper.setSpeed(speed);
+                              }
+                              else {
+                                // Joystick in neutral Y position: stop the motor
+                                stepper.setSpeed(0);
+                              }
+                            
+                              // Run the stepper continuously at the set speed
+                              stepper.runSpeed();
+                            }
+                    </code>
+                </pre>
+                
+                <br> <br>
+                <h2> Encoder Code</h2>
+                <pre>
+                    <code>
+                        // left to do: calibrate with actual stepper motor for numbers
+                        // setting up backwards motion(?) lemmie think if this is necessary
+                        
+                        #include "AiEsp32RotaryEncoder.h"
+                        #include "Arduino.h"
+                        
+                        #define ROTARY_ENCODER_A_PIN D2
+                        #define ROTARY_ENCODER_B_PIN D4
+                        #define ROTARY_ENCODER_BUTTON_PIN 21
+                        #define ROTARY_ENCODER_VCC_PIN -1
+                        // How many rotations corresponds to one "turn"; may have to calibrate with actual stepper motor
+                        #define ROTARY_ENCODER_STEPS 100 
+                        
+                        #define MAX_VALUE 100
+                        #define MIN_VALUE -100
+                        
+                        int ACTUAL_VALUE = 0;
+                        int TIMES_FULLY_ROTATED = 0;
+                        
+                        //instead of changing here, rather change numbers above
+                        AiEsp32RotaryEncoder rotaryEncoder = AiEsp32RotaryEncoder(ROTARY_ENCODER_A_PIN, ROTARY_ENCODER_B_PIN, ROTARY_ENCODER_BUTTON_PIN, ROTARY_ENCODER_VCC_PIN, ROTARY_ENCODER_STEPS);
+                        
+                        void rotary_loop()
+                        {
+                          if (rotaryEncoder.encoderChanged())
+                          {
+                            int value = rotaryEncoder.readEncoder();
+                        
+                            Serial.print("Value: ");
+                            Serial.print(value);
+                            Serial.print(" | Times fully rotated: ");
+                            Serial.println(TIMES_FULLY_ROTATED);
+                        
+                            if (value >= MAX_VALUE)
+                            {
+                              TIMES_FULLY_ROTATED++;
+                            }
+                            else if (value )
+                          }
+                        }
+                        
+                        void IRAM_ATTR readEncoderISR()
+                        {
+                            rotaryEncoder.readEncoder_ISR();
+                        }
+                        
+                        void setup()
+                        {
+                            Serial.begin(250000);
+                        
+                            //we must initialize rotary encoder
+                            rotaryEncoder.begin();
+                            rotaryEncoder.setup(readEncoderISR);
+                            //set boundaries and if values should cycle or not
+                            //in this example we will set possible values between 0 and 1000;
+                            bool circleValues = true;
+                            rotaryEncoder.setBoundaries(MIN_VALUE, MAX_VALUE, circleValues); //minValue, maxValue, circleValues true|false (when max go to min and vice versa)
+                            Serial.print("setted up");
+                            /*Rotary acceleration introduced 25.2.2021.
+                           * in case range to select is huge, for example - select a value between 0 and 1000 and we want 785
+                           * without accelerateion you need long time to get to that number
+                           * Using acceleration, faster you turn, faster will the value raise.
+                           * For fine tuning slow down.
+                           */
+                            rotaryEncoder.disableAcceleration(); //acceleration is now enabled by default - disable if you dont need it
+                            //rotaryEncoder.setAcceleration(250); //or set the value - larger number = more accelearation; 0 or 1 means disabled acceleration
+                        }
+                        
+                        void loop()
+                        {
+                            //in loop call your custom function which will process rotary encoder values
+                            rotary_loop();
+                            delay(50); //or do whatever you need to do...
+                        }
+                    </code>
+                </pre>
             </div>
           </div>
 

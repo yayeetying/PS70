@@ -37,16 +37,67 @@
               </li>
               <li class="barItem blueHover"><a href="../about.html">About</a></li>
               <!-- Colored box denotes active tab -->
-              <li class="barItem blueHover"><a href="../proposal.html">Final Project Proposal</a></li>
+              <li class="barItem blueHover"><a href="../proposal.html">Final Project</a></li>
           </ul>
         </div>
 
         <div class="container">
           <div class="section">
-              <h3><b>Fusion 360 and Laser Cutting!</b></h3>
+              <h3><b>Minimum Viable Project</b></h3>
               <hr> <!-- Adds horizontal line -->
 
-              <h4><b>First, the box!</b></h4>
+              <video width="640" height="480" controls>
+                <source src="https://yayeetying.github.io/PS70/video/PumpSensorpart1.MOV" type="video/mp4">
+            </video> <br> <br>
+            <p> In the above video, we can see that we have some input (soil moisture sensor), some output (water pump),
+              an ESP32 Xiao connected to a breadboard and a plant. So this input is keeping track of the soil moisture reading,
+              and if this reading ever falls below some specified threshold (in our case, arbritrarily chosen to be 
+              3200, but this value changes depending on if we're working with succulents, other types of plants, etc.),
+              then in the terminal, it spits out "You need some milk!" and the water pump starts pumping water. If the reading
+              is above the reading, then the water pump stops in fear of overflooding the plant. <br> <br>
+              Though, we can also see from the video that this water pump stopping mechanism isn't quite the best right now -- 
+              I'm having trouble stopping the water pump once it starts.
+            </p> <br>
+
+            <pre>
+              <code>  
+                  // Sensor pins
+                  #define sensorPin A0
+                  #define RELAY_PIN D2
+               
+                  void setup() {	
+                    Serial.begin(9600);
+                  
+                    // Prepare water pump
+                    pinMode(RELAY_PIN, OUTPUT);
+                  }
+                  
+                  void loop() {
+                    //get the reading from the function below and print it
+                    Serial.print("Analog output: ");
+                    int waterAmount = readSensor();
+                    Serial.println(waterAmount);
+                  
+                    if (waterAmount < 3200) {
+                      Serial.println("You need some milk!");
+                      digitalWrite(RELAY_PIN, HIGH); // turn on pump
+                      delay(500);
+                    }
+                    else {
+                      Serial.println("Aight, don't flood me now >>>>");
+                      digitalWrite(RELAY_PIN, LOW); // turn off pump 
+                      delay(500);
+                    }
+                    delay(200);
+                  }
+                  
+                  //  This function returns the analog soil moisture measurement
+                  int readSensor() {					
+                    int val = analogRead(sensorPin);	// Read the analog value form sensor
+                    return val;							// Return analog moisture value
+                  }
+              </code>
+            </pre>
           </div>
         </div>
 
