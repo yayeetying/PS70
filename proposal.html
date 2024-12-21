@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="header darkPinked">
-            <h1>Final Project <br> Proposal</h1>
+            <h1>Final Project </h1>
         </div>
 
         <!-- Nav Bar -->
@@ -39,6 +39,124 @@
               <!-- Colored box denotes active tab -->
               <li class="barItem pinkHover"><a  class="pinked" href="proposal.html">Final Project</a></li>
           </ul>
+        </div>
+
+        <div class="pinked">
+            <div class="container">
+                <div class="section">
+                    <h3><b>Final Project Overview</b></h3>
+                    <hr> <!-- Adds horizontal line -->
+                    Here is the finished product! <br>
+                    <video width="640" height="480" controls>
+                        <source src="https://yayeetying.github.io/PS70/video/finalprojpt1.MOV" type="video/mp4">
+                    </video> <br> <br>
+                    Here is what the project contains: <br>
+                    <ul>
+                        <li> Soil Moisture Sensor </li>
+                        <li> LED Light </li>
+                        <li> Water Pump </li>
+                        <li> Soldered Circuitry Board </li>
+                        <li> Flower-Pot-like enclosing for the circuitry, laser-cut </li>
+                        <li> 3D Printed Flowers for aesthetics </li>
+                        <li> CNC-Milled bottom for the flower pot </li>
+                    </ul>
+                    <video width="640" height="480" controls>
+                        <source src="https://yayeetying.github.io/PS70/video/finalprojparts.MOV" type="video/mp4">
+                    </video>
+                    <video width="640" height="480" controls>
+                        <source src="https://yayeetying.github.io/PS70/video/finalprojlights.MOV" type="video/mp4">
+                    </video> <br> <br>
+                    <p> 
+                        This is essentially an automated irrigation system. By placing the soil moisture sensor and the tube 
+                        connected to the water pump in the same pot as the flower pot you want to irrigate, you can ensure
+                        that whenever the moisture sensor deems that the flower isn't receiving enough water, it will 
+                        automatically make the water pump start pumping out water till the soil is wet enough. The LED light 
+                        serves as an indicator as to whether the plant is "happy" or not (received enough water) -- if the 
+                        plant is happily irrigated, the LED light will randomly flash any colors, but if it isn't well watered,
+                        then the LED light will stop. One thing to note is that Bobby helped me fix the issue of the water pump 
+                        not stopping once it started by giving me a piece (I forget what it's called).
+                    </p> <br>
+                    Here is the code for controlling the input soil moisture sensor, the output LED light, and the output 
+                    water pump. <br>
+                    <pre>
+                        <code>
+                            #include Adafruit_NeoPixel.h
+
+                                // LED
+                                #define LIGHTPIN D4
+                                #define NUMPIXELS 10 
+                                #define DELAYVAL 500 // Time (in milliseconds) to pause between pixels
+                                
+                                // Sensor pins
+                                #define sensorPin A0
+                                #define RELAY_PIN D2
+                                
+                                Adafruit_NeoPixel strip(NUMPIXELS, LIGHTPIN, NEO_GRB + NEO_KHZ800);
+                                
+                                void setup() {	
+                                    Serial.begin(9600);
+                                
+                                  // Prepare water pump
+                                  pinMode(RELAY_PIN, OUTPUT);
+                                
+                                  // Initialize LED strip object
+                                  strip.begin(); 
+                                  strip.show();
+                                  strip.setBrightness(10); // Set BRIGHTNESS low to reduce draw (max = 255)
+                                }
+                                
+                                void loop() {
+                                    //get the reading from the function below and print it
+                                    Serial.print("Analog output: ");
+                                    int waterAmount = readSensor();
+                                  Serial.println(waterAmount);
+                                
+                                  // Set all pixel colors to 'off'
+                                  strip.clear();
+                                
+                                  if (waterAmount < 3200) {
+                                    Serial.println("You need some milk!");
+                                    digitalWrite(RELAY_PIN, HIGH); // turn on pump
+                                    delay(500);
+                                
+                                    // Make sure LED light isn't shining
+                                    strip.setBrightness(10);
+                                  }
+                                  else {
+                                    Serial.println("Aight, don't flood me now >>>>");
+                                    digitalWrite(RELAY_PIN, LOW); // turn off pump 
+                                    delay(500);
+                                
+                                    // Let LED light be indicator of happy plant that has adequate watering
+                                    for(int i=0; i<.NUMPIXELS; i++) {
+                                      // Set Random Color
+                                      int randRed = random(0, 255);
+                                      int randBlue = random(0, 255);
+                                      int randGreen = random(0, 255);
+                                      strip.setPixelColor(i, strip.Color(randRed, randGreen, randBlue));
+                                      // Send the updated pixel colors to the hardware.
+                                      strip.show();
+                                      // Pause before next pass through loop
+                                      delay(DELAYVAL);
+                                    }
+                                  }
+                                    delay(200);
+                                }
+                                
+                                //  This function returns the analog soil moisture measurement
+                                int readSensor() {					
+                                    int val = analogRead(sensorPin);	// Read the analog value form sensor
+                                    return val;							// Return analog moisture value
+                                }
+                        </code>
+                    </pre>
+                
+                    <h3><b3> Others </b3></h3>
+                    <hr>
+                    I also 3D printed many flowers for the aesthetics, designed in Fusion 360 a flower pot-like vase for the circuitry 
+                    (which I laser cutted out), and CNC-milled the bottom wooden plate for the flower pot. 
+                </div>
+            </div>
         </div>
 
         <div class="container">
